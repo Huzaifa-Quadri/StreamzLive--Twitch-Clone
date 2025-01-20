@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "94122359912",
+    "firebase_url": "https://streamzylive-twitchclone-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "streamzylive-twitchclone",
+    "storage_bucket": "streamzylive-twitchclone.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94122359912:android:0990c64adfc25945ec8fdd",
+        "android_client_info": {
+          "package_name": "com.example.streamzlive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnVOUxQ-_evGUwgN_svtECZbRhOXJl1eM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
