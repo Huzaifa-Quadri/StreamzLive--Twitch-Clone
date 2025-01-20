@@ -1,12 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:streamzlive/resources/userprovider.dart';
 import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/screens/loginScreen.dart';
 import 'package:streamzlive/screens/onboardingScreen.dart';
 import 'package:streamzlive/screens/signupScreen.dart';
+import 'package:streamzlive/secrets/initialize_keys.dart';
 import 'package:streamzlive/utils/colors.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: apiKey,
+            appId: appId,
+            messagingSenderId: messagingSenderId,
+            projectId: projectId),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
+  } catch (e) {
+    print('\n\n\tSome Error has Occured : ${e.toString()}\n\n');
+  }
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

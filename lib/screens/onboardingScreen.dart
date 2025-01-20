@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:streamzlive/screens/loginScreen.dart';
+import 'package:streamzlive/screens/signupScreen.dart';
 import 'package:streamzlive/widgets/customButton.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -23,11 +25,17 @@ class OnBoardingScreen extends StatelessWidget {
               style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
             ),
             const Gap(25),
-            CustomButton(text: 'Log in', onTap: () {}),
+            CustomButton(
+                text: 'Log in',
+                onTap: () {
+                  Navigator.of(context).pushNamed(Loginscreen.routname);
+                }),
             const Gap(8),
             CustomButton(
               text: 'Sign up',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(SignUpScreen.routname);
+              },
             ),
           ],
         ),

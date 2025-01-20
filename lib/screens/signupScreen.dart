@@ -21,6 +21,19 @@ class _SigUpScreenState extends State<SignUpScreen> {
 
   final AuthMethods _authMethods = AuthMethods();
 
+  void _signupuser() async {
+    bool res = await _authMethods.signup(
+      _usernamecontroller.text,
+      _emailcontroller.text,
+      _passwordcontroller.text,
+      context,
+    );
+
+    if (res && mounted) {
+      Navigator.pushNamed(context, HomeScreen.routename);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -70,7 +83,7 @@ class _SigUpScreenState extends State<SignUpScreen> {
               const Gap(10),
               CustomTextField(emailcontroller: _passwordcontroller),
               const Gap(30),
-              CustomButton(text: 'Sign up', onTap: () {})
+              CustomButton(text: 'Sign up', onTap: _signupuser)
             ],
           ),
         ),
