@@ -8,7 +8,7 @@ import 'package:streamzlive/resources/auth_Methods.dart';
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
-  // static const routname = './signup';
+  static const routname = './signup';
 
   @override
   State<SignUpScreen> createState() => _SigUpScreenState();

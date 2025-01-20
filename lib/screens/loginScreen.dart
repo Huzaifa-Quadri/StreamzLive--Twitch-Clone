@@ -6,7 +6,7 @@ import 'package:streamzlive/widgets/custom_textfiled.dart';
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
 
-  // static const routname = './login';
+  static const routname = './login';
 
   @override
   State<Loginscreen> createState() => _LoginscreenState();

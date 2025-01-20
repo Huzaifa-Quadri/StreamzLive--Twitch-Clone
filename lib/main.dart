@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:streamzlive/screens/home.dart';
+import 'package:streamzlive/screens/loginScreen.dart';
 import 'package:streamzlive/screens/onboardingScreen.dart';
+import 'package:streamzlive/screens/signupScreen.dart';
 import 'package:streamzlive/utils/colors.dart';
 
 void main() {
@@ -26,6 +29,12 @@ class MyApp extends StatelessWidget {
           iconTheme: const IconThemeData(color: primaryColor),
         ),
       ),
+      routes: {
+        OnBoardingScreen.routName: (context) => const OnBoardingScreen(),
+        Loginscreen.routname: (context) => const Loginscreen(),
+        SignUpScreen.routname: (context) => const SignUpScreen(),
+        HomeScreen.routename: (context) => const HomeScreen()
+      },
       home: const OnBoardingScreen(),
     );
   }

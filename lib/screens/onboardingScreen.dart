@@ -5,7 +5,7 @@ import 'package:streamzlive/widgets/customButton.dart';
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
 
-  // static const routName = '.login/';
+  static const routName = '.login/';
 
   @override
   Widget build(BuildContext context) {
