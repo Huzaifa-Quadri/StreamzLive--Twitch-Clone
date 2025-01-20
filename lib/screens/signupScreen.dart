@@ -4,6 +4,7 @@ import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/widgets/customButton.dart';
 import 'package:streamzlive/widgets/custom_textfiled.dart';
 import 'package:streamzlive/resources/auth_Methods.dart';
+import 'package:streamzlive/widgets/loading_indicator.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,15 +21,21 @@ class _SigUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernamecontroller = TextEditingController();
 
   final AuthMethods _authMethods = AuthMethods();
+  bool _isloading = false;
 
   void _signupuser() async {
+    setState(() {
+      _isloading = true;
+    });
     bool res = await _authMethods.signup(
       _usernamecontroller.text,
       _emailcontroller.text,
       _passwordcontroller.text,
       context,
     );
-
+    setState(() {
+      _isloading = false;
+    });
     if (res && mounted) {
       Navigator.pushReplacementNamed(context, HomeScreen.routename);
     }
@@ -67,23 +74,25 @@ class _SigUpScreenState extends State<SignUpScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Gap(10),
-              CustomTextField(emailcontroller: _usernamecontroller),
+              CustomTextField(textcontroller: _usernamecontroller),
               const Gap(20),
               const Text(
                 'Email',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Gap(10),
-              CustomTextField(emailcontroller: _emailcontroller),
+              CustomTextField(textcontroller: _emailcontroller),
               const Gap(20),
               const Text(
                 'Password',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Gap(10),
-              CustomTextField(emailcontroller: _passwordcontroller),
+              CustomTextField(textcontroller: _passwordcontroller),
               const Gap(30),
-              CustomButton(text: 'Sign up', onTap: _signupuser)
+              _isloading
+                  ? const Loadingindicator()
+                  : CustomButton(text: 'Sign up', onTap: _signupuser)
             ],
           ),
         ),

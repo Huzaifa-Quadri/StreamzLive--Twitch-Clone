@@ -4,6 +4,7 @@ import 'package:streamzlive/resources/auth_Methods.dart';
 import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/widgets/customButton.dart';
 import 'package:streamzlive/widgets/custom_textfiled.dart';
+import 'package:streamzlive/widgets/loading_indicator.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -78,19 +79,17 @@ class _LoginscreenState extends State<Loginscreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Gap(10),
-              CustomTextField(emailcontroller: _emailcontroller),
+              CustomTextField(textcontroller: _emailcontroller),
               const Gap(20),
               const Text(
                 'Password',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Gap(10),
-              CustomTextField(emailcontroller: _passwordcontroller),
+              CustomTextField(textcontroller: _passwordcontroller),
               const Gap(30),
               loading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? const Loadingindicator()
                   : CustomButton(text: 'Log in', onTap: login)
             ],
           ),
