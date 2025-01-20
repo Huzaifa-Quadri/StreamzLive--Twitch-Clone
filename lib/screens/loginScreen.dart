@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:streamzlive/resources/auth_Methods.dart';
+import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/widgets/customButton.dart';
 import 'package:streamzlive/widgets/custom_textfiled.dart';
 
@@ -16,6 +18,18 @@ class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _usernamecontroller = TextEditingController();
+  final AuthMethods _auth = AuthMethods();
+
+  void login() async {
+    bool res = await _auth.logInUser(
+        _emailcontroller.text, _passwordcontroller.text, context);
+
+    if (res && mounted) {
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routename);
+    } else {
+      return;
+    }
+  }
 
   @override
   void dispose() {
