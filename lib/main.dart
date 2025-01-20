@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streamzlive/resources/auth_Methods.dart';
 import 'package:streamzlive/resources/userprovider.dart';
 import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/screens/loginScreen.dart';
@@ -9,6 +11,8 @@ import 'package:streamzlive/screens/onboardingScreen.dart';
 import 'package:streamzlive/screens/signupScreen.dart';
 import 'package:streamzlive/secrets/initialize_keys.dart';
 import 'package:streamzlive/utils/colors.dart';
+import 'package:streamzlive/models/user.dart' as model;
+import 'package:streamzlive/widgets/loading_indicator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +65,41 @@ class MyApp extends StatelessWidget {
         SignUpScreen.routname: (context) => const SignUpScreen(),
         HomeScreen.routename: (context) => const HomeScreen()
       },
-      home: const OnBoardingScreen(),
+      home: FutureBuilder(
+        future: AuthMethods()
+            .getCurrentUser(
+          FirebaseAuth.instance.currentUser
+              ?.uid, /*same as-> FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser!.uid : null */
+        )
+            .then(
+          (onValue) {
+            if (onValue != null && context.mounted) {
+              Provider.of<UserProvider>(context, listen: false)
+                  .setUser(model.User.fromMap(onValue));
+            }
+            return onValue;
+          },
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child:
+                  Text('Some Error has Occured ${snapshot.error.toString()}'),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loadingindicator();
+          }
+          // print(snapshot.data);
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          }
+
+          return const OnBoardingScreen();
+        },
+      ),
+      // home: const OnBoardingScreen(),
     );
   }
 }

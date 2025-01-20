@@ -17,16 +17,31 @@ class Loginscreen extends StatefulWidget {
 class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
-  final TextEditingController _usernamecontroller = TextEditingController();
+
   final AuthMethods _auth = AuthMethods();
+  bool loading = false;
 
   void login() async {
+    setState(() {
+      loading = true;
+    });
     bool res = await _auth.logInUser(
         _emailcontroller.text, _passwordcontroller.text, context);
 
+    // print('\n\n Is User Succesfully Logged in ? $res \n\n');
+
     if (res && mounted) {
       Navigator.of(context).pushReplacementNamed(HomeScreen.routename);
+
+      setState(() {
+        loading = false;
+      });
+      _emailcontroller.clear();
+      _passwordcontroller.clear();
     } else {
+      setState(() {
+        loading = false;
+      });
       return;
     }
   }
@@ -36,7 +51,6 @@ class _LoginscreenState extends State<Loginscreen> {
     super.dispose();
     _emailcontroller.dispose();
     _passwordcontroller.dispose();
-    _usernamecontroller.dispose();
   }
 
   @override
@@ -73,7 +87,11 @@ class _LoginscreenState extends State<Loginscreen> {
               const Gap(10),
               CustomTextField(emailcontroller: _passwordcontroller),
               const Gap(30),
-              CustomButton(text: 'Sign up', onTap: () {})
+              loading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : CustomButton(text: 'Log in', onTap: login)
             ],
           ),
         ),
