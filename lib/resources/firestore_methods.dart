@@ -57,4 +57,41 @@ class FirestoreMethods {
     }
     return channelId;
   }
+
+  Future<void> updateViewCount(String id, bool isIncrease) async {
+    // print('\n\n Updating all View Count .......');
+    try {
+      await _firestore
+          .collection('livestream')
+          .doc(id)
+          .update({'viewers': FieldValue.increment(isIncrease ? 1 : -1)});
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    // print('updated  !   ! ! !');
+  }
+
+  Future<void> endLiveStream(String channelId) async {
+    // print('\n\nLive Stream Ending .......');
+    try {
+      QuerySnapshot snap = await _firestore
+          .collection('livestream')
+          .doc(channelId)
+          .collection('comments')
+          .get();
+
+      for (int i = 0; i < snap.docs.length; i++) {
+        await _firestore
+            .collection('livestream')
+            .doc(channelId)
+            .collection('comments')
+            .doc((snap.docs[i].data() as dynamic)['commentId'])
+            .delete();
+      }
+      await _firestore.collection('livestream').doc(channelId).delete();
+      // print('\n\nEnded and deleted all the comments');
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 }
