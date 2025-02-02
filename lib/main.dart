@@ -4,7 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streamzlive/resources/auth_Methods.dart';
-import 'package:streamzlive/resources/userprovider.dart';
+import 'package:streamzlive/provider/userprovider.dart';
+import 'package:streamzlive/screens/go_live_screen.dart';
 import 'package:streamzlive/screens/home.dart';
 import 'package:streamzlive/screens/loginScreen.dart';
 import 'package:streamzlive/screens/onboardingScreen.dart';
@@ -21,10 +22,10 @@ void main() async {
     if (kIsWeb) {
       await Firebase.initializeApp(
         options: const FirebaseOptions(
-            apiKey: apiKey,
-            appId: appId,
-            messagingSenderId: messagingSenderId,
-            projectId: projectId),
+            apiKey: web_apiKey,
+            appId: web_appId,
+            messagingSenderId: web_messagingSenderId,
+            projectId: web_projectId),
       );
     } else {
       await Firebase.initializeApp();
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
         OnBoardingScreen.routName: (context) => const OnBoardingScreen(),
         Loginscreen.routname: (context) => const Loginscreen(),
         SignUpScreen.routname: (context) => const SignUpScreen(),
-        HomeScreen.routename: (context) => const HomeScreen()
+        HomeScreen.routename: (context) => const HomeScreen(),
+        GoLiveScreen.routename: (context) => const GoLiveScreen(),
       },
       home: FutureBuilder(
         future: AuthMethods()

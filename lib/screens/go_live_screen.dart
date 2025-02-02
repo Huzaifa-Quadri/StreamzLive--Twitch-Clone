@@ -1,16 +1,18 @@
 import 'dart:typed_data';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:streamzlive/resources/firestore_methods.dart';
+import 'package:streamzlive/screens/broadcast_screen.dart';
 import 'package:streamzlive/utils/colors.dart';
 import 'package:streamzlive/utils/image_picker.dart';
+import 'package:streamzlive/utils/utils.dart';
 import 'package:streamzlive/widgets/customButton.dart';
 import 'package:streamzlive/widgets/custom_textfiled.dart';
 
 class GoLiveScreen extends StatefulWidget {
+  static String routename = './golive';
   const GoLiveScreen({super.key});
 
   @override
@@ -20,6 +22,32 @@ class GoLiveScreen extends StatefulWidget {
 class _GoLiveScreenState extends State<GoLiveScreen> {
   final TextEditingController _titlecontroller = TextEditingController();
   Uint8List? _img;
+
+  final FirestoreMethods _firestoreMethods = FirestoreMethods();
+  void startStream() async {
+    String channelId = '';
+
+    if (_titlecontroller.text != null && _img != null) {
+      channelId = await _firestoreMethods.startLiverstream(
+          _titlecontroller.text, _img, context);
+    } else {
+      if (context.mounted) {
+        debugPrint(
+            'Either of fileds not Entered :-\n Title -${_titlecontroller.text}, Image -$_img');
+        showSnackBar(context, 'Enter all the fields !');
+      }
+    }
+
+    if (channelId.isNotEmpty && mounted) {
+      showSnackBar(context, 'Stream Started Succesfully');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              BroadcastScreen(channelId: channelId, isBroadcaster: true),
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -110,10 +138,13 @@ class _GoLiveScreenState extends State<GoLiveScreen> {
                 )
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: CustomButton(text: 'Go Live', onTap: () {}),
+              padding: const EdgeInsets.only(bottom: 20),
+              child: CustomButton(
+                text: 'Go Live',
+                onTap: startStream,
+              ),
             )
           ],
         ),
