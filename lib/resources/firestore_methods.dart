@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:streamzlive/models/livestream.dart';
 import 'package:streamzlive/provider/userprovider.dart';
 import 'package:streamzlive/utils/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -92,6 +93,30 @@ class FirestoreMethods {
       // print('\n\nEnded and deleted all the comments');
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<void> chat(String text, String channelId, BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    try {
+      String commentId = const Uuid().v1();
+      await _firestore
+          .collection('livestream')
+          .doc(channelId)
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'username': user.username,
+        'message': text,
+        'uid': user.userId,
+        'createdAt': DateTime.now(),
+        'commentId': commentId,
+      });
+    } on FirebaseFirestore catch (e) {
+      debugPrint('\n\n${e.toString()}');
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 }
